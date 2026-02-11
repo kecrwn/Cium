@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Sayang 💕</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Quicksand:wght@400;600;700&family=Dancing+Script:wght@600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FFC4C4;
+            --secondary: #FFF8E7;
+            --accent: #C1E1C1;
+            --text: #5D4037;
+            --highlight: #FF6961;
+            --soft-pink: #FFE4E1;
+            --lavender: #E6E6FA;
+            --cream: #FFFDD0;
+            --glass: rgba(255, 255, 255, 0.85);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--soft-pink) 0%, var(--lavender) 50%, var(--primary) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            color: var(--text);
+        }
+
+        /* Loading Screen (Cute) */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--lavender) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-text {
+            font-family: 'VT323', monospace;
+            font-size: 2.5rem;
+            color: var(--text);
+            margin-bottom: 20px;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        .loading-bar-container {
+            width: 200px;
+            height: 20px;
+            background: var(--secondary);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 3px solid var(--text);
+        }
+
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--highlight), var(--primary));
+            border-radius: 8px;
+            transition: width 0.3s ease;
+        }
+
+        /* Loading Overlay (Headphones) */
+        #loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #2D2D2D 0%, #1a1a1a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .headphones-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .headphones-sub {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 20px;
+        }
+
+        .tap-hint {
+            position: absolute;
+            bottom: 50px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.4);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        /* Lock Screen */
+        #lock-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--soft-pink) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            padding: 20px;
+        }
+
+        #lock-screen.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .lock-title {
+            font-family: 'VT323', monospace;
+            font-size: 3rem;
+            color: var(--text);
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0 var(--secondary);
+        }
+
+        .lock-subtitle {
+            font-size: 1.2rem;
+            color: var(--text);
+            opacity: 0.8;
+            margin-bottom: 40px;
+        }
+
+        .unlock-btn {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            padding: 15px 50px;
+            background: var(--accent);
+            border: 3px solid var(--text);
+            border-radius: 25px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 4px 4px 0 var(--text);
+        }
+
+        .unlock-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--text);
+        }
+
+        /* Main Content */
+        #main-content {
+            min-height: 100vh;
+            padding: 20px;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            padding-bottom: 120px;
+        }
+
+        #main-content.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Floating Hearts Background */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.6;
+            animation: floatUp 8s ease-in-out infinite;
+        }
+
+        @keyframes floatUp {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header h1 {
+            font-family: 'VT323', monospace;
+            font-size: 2.5rem;
+            color: var(--text);
+            text-shadow: 2px 2px 0 var(--secondary);
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* Time Counter Card */
+        .time-card {
+            background: var(--secondary);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 3px solid var(--text);
+            box-shadow: 6px 6px 0 var(--text);
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .time-card h2 {
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--highlight);
+        }
+
+        .main-time {
+            font-family: 'VT323', monospace;
+            font-size: 2.8rem;
+            color: var(--text);
+            line-height: 1.2;
+        }
+
+        .time-unit {
+            font-size: 1rem;
+            color: var(--text);
+            opacity: 0.7;
+        }
+
+        .time-details {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .time-detail {
+            background: var(--soft-pink);
+            padding: 8px 15px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            border: 2px solid var(--text);
+        }
+
+        /* Memory Gallery */
+        .memory-section {
+            margin: 30px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .memory-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            text-align: center;
+            color: var(--text);
+            margin-bottom: 25px;
+        }
+
+        .memory-gallery {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 12px 12px 25px 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transform: rotate(var(--rotate, 0deg));
+            transition: transform 0.3s ease;
+            max-width: 45%;
+            flex: 1 1 140px;
+        }
+
+        .polaroid.rotate-left {
+            --rotate: -5deg;
+            margin-bottom: 30px;
+        }
+
+        .polaroid.rotate-right {
+            --rotate: 5deg;
+            margin-top: 30px;
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05);
+            z-index: 10;
+        }
+
+        .polaroid img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 3px;
+        }
+
+        .polaroid-caption {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1rem;
+            color: var(--text);
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .tape-decoration {
+            position: absolute;
+            width: 40px;
+            height: 20px;
+            background: rgba(255, 182, 193, 0.7);
+            transform: rotate(-15deg);
+            top: -10px;
+            left: 50%;
+            margin-left: -20px;
+        }
+
+        /* Avatar Section */
+        .avatar-section {
+            text-align: center;
+            margin: 30px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar-container {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 15px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .avatar {
+            width: 100%;
+            height: 100%;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 4px solid var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            box-shadow: 0 8px 0 var(--text);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+        }
+
+        .avatar:hover::before {
+            animation: shine 0.5s ease;
+        }
+
+        @keyframes shine {
+            0% { left: -50%; }
+            100% { left: 150%; }
+        }
+
+        .avatar:active {
+            transform: scale(0.95) translateY(4px);
+            box-shadow: 0 4px 0 var(--text);
+        }
+
+        .avatar.blush {
+            background: var(--primary);
+        }
+
+        .avatar-tap-hint {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        /* Kangen Button */
+        .kangen-section {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .kangen-btn {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            padding: 18px 60px;
+            background: var(--highlight);
+            border: 3px solid var(--text);
+            border-radius: 30px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 5px 5px 0 var(--text);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kangen-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .kangen-btn:hover::before {
+            left: 100%;
+        }
+
+        .kangen-btn:active {
+            transform: translate(3px, 3px);
+            box-shadow: 2px 2px 0 var(--text);
+        }
+
+        .kangen-response {
+            margin-top: 20px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--highlight);
+            min-height: 30px;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+
+        .kangen-response.show {
+            opacity: 1;
+            transform: scale(1);
+            animation: popIn 0.4s ease;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Letter Button */
+        .letter-section {
+            text-align: center;
+            margin: 25px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .letter-btn {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: 15px 40px;
+            background: var(--secondary);
+            border: 3px solid var(--text);
+            border-radius: 20px;
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 4px 4px 0 var(--text);
+        }
+
+        .letter-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0 var(--text);
+        }
+
+        /* Letter Modal */
+        .letter-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            padding: 20px;
+        }
+
+        .letter-modal.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .letter-content {
+            background: var(--cream);
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            border-radius: 20px;
+            border: 4px solid var(--text);
+            box-shadow: 8px 8px 0 var(--text);
+            overflow: hidden;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+
+        .letter-modal.visible .letter-content {
+            transform: scale(1);
+        }
+
+        .letter-header {
+            background: var(--primary);
+            padding: 15px 20px;
+            border-bottom: 3px solid var(--text);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .letter-header h3 {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            width: 35px;
+            height: 35px;
+            background: var(--highlight);
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:active {
+            transform: scale(0.9);
+        }
+
+        .letter-body {
+            padding: 25px;
+            max-height: 60vh;
+            overflow-y: auto;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .letter-body p {
+            margin-bottom: 15px;
+        }
+
+        .letter-body .signature {
+            text-align: right;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+            margin-top: 20px;
+            color: var(--highlight);
+        }
+
+        /* Collapsible Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1500;
+        }
+
+        .music-widget {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 3px solid var(--text);
+            border-radius: 50px;
+            box-shadow: 5px 5px 0 var(--text);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .music-widget.expanded {
+            width: 300px;
+            border-radius: 25px;
+        }
+
+        .music-icon {
+            width: 55px;
+            height: 55px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            transition: all 0.3s ease;
+        }
+
+        .music-widget.expanded .music-icon {
+            display: none;
+        }
+
+        .music-controls-wrapper {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            gap: 10px;
+            opacity: 0;
+            width: 0;
+            transition: all 0.4s ease;
+        }
+
+        .music-widget.expanded .music-controls-wrapper {
+            opacity: 1;
+            width: auto;
+        }
+
+        .music-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .music-btn {
+            width: 35px;
+            height: 35px;
+            background: var(--accent);
+            border: 2px solid var(--text);
+            border-radius: 50%;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .music-btn:active {
+            transform: scale(0.9);
+        }
+
+        .music-btn.play-btn {
+            background: var(--highlight);
+            color: white;
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+
+        .song-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .song-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .song-progress {
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .song-progress-bar {
+            height: 100%;
+            background: var(--highlight);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .now-playing-indicator {
+            display: none;
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        .music-widget:not(.expanded) .now-playing-indicator {
+            display: block;
+        }
+
+        /* Heart Particles */
+        .heart-particle {
+            position: fixed;
+            font-size: 1.5rem;
+            pointer-events: none;
+            z-index: 3000;
+            animation: heartPop 1s ease-out forwards;
+        }
+
+        @keyframes heartPop {
+            0% {
+                transform: scale(0) translateY(0);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5) translateY(-50px);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 4000;
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Decorative Elements */
+        .decoration {
+            position: fixed;
+            font-size: 2rem;
+            opacity: 0.4;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .decoration.top-left {
+            top: 20px;
+            left: 20px;
+        }
+
+        .decoration.top-right {
+            top: 20px;
+            right: 20px;
+        }
+
+        .decoration.bottom-left {
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .decoration.bottom-right {
+            bottom: 20px;
+            right: 20px;
+        }
+
+        /* Screen Shake */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 400px) {
+            .main-time {
+                font-size: 2.2rem;
+            }
+            
+            .lock-title {
+                font-size: 2.2rem;
+            }
+            
+            .avatar-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .avatar {
+                font-size: 4rem;
+            }
+
+            .headphones-text {
+                font-size: 1.6rem;
+            }
+
+            .polaroid {
+                max-width: 42%;
+            }
+
+            .polaroid img {
+                height: 120px;
+            }
+
+            .music-widget.expanded {
+                width: 260px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cute Loading Screen -->
+    <div id="loading-screen">
+        <div class="loading-text">Memuat cinta...</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loading-bar"></div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="headphones-text">Please wear your headphones sayang 🎧</div>
+        <div class="headphones-sub">Agar bisa dengerin playlist special kita!</div>
+        <div class="tap-hint">Tap anywhere to continue</div>
+    </div>
+
+    <!-- Lock Screen -->
+    <div id="lock-screen">
+        <div class="lock-title">For Sayang 💕</div>
+        <div class="lock-subtitle">Sentuh untuk membuka</div>
+        <button class="unlock-btn" id="unlock-btn">BUKA</button>
+    </div>
+
+    <!-- Floating Hearts Background -->
+    <div class="floating-hearts" id="floating-hearts"></div>
+
+    <!-- Decorative Elements -->
+    <div class="decoration top-left">🌸</div>
+    <div class="decoration top-right">🌺</div>
+    <div class="decoration bottom-left">🌷</div>
+    <div class="decoration bottom-right">🌹</div>
+
+    <!-- Main Content -->
+    <div id="main-content">
+        <div class="header">
+            <h1>Happy 671 Days!</h1>
+            <p>11 February 2026</p>
+        </div>
+
+        <!-- Time Counter -->
+        <div class="time-card">
+            <h2>✨ Waktu Bersama ✨</h2>
+            <div class="main-time">
+                <span id="years">1</span> Tahun<br>
+                <span id="months">10</span> Bulan
+            </div>
+            <div class="time-unit">atau</div>
+            <div class="main-time" style="font-size: 2.2rem;">
+                <span id="days">671</span> Hari
+            </div>
+            <div class="time-details">
+                <div class="time-detail">22 Bulan</div>
+                <div class="time-detail">95 Minggu 6 Hari</div>
+            </div>
+        </div>
+
+        <!-- Memory Gallery -->
+        <div class="memory-section">
+            <div class="memory-title">Our Memories 📸</div>
+            <div class="memory-gallery">
+                <div class="polaroid rotate-left">
+                    <div class="tape-decoration"></div>
+                    <img src="assets/img/adelia_tattoo.png" alt="Tattoo Memory">
+                    <div class="polaroid-caption">Forever Marked 💕</div>
+                </div>
+                <div class="polaroid rotate-right">
+                    <div class="tape-decoration"></div>
+                    <img src="assets/img/video_call.jpg" alt="Video Call">
+                    <div class="polaroid-caption">Distance means nothing 💫</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avatar -->
+        <div class="avatar-section">
+            <div class="avatar-container" id="avatar-container">
+                <div class="avatar" id="avatar">🐻</div>
+            </div>
+            <div class="avatar-tap-hint">Ketuk aku! 💕</div>
+        </div>
+
+        <!-- Kangen Button -->
+        <div class="kangen-section">
+            <button class="kangen-btn" id="kangen-btn">Kangen? 🥺</button>
+            <div class="kangen-response" id="kangen-response"></div>
+        </div>
+
+        <!-- Letter Button -->
+        <div class="letter-section">
+            <button class="letter-btn" id="letter-btn">📝 Baca Suratku</button>
+        </div>
+    </div>
+
+    <!-- Letter Modal -->
+    <div class="letter-modal" id="letter-modal">
+        <div class="letter-content">
+            <div class="letter-header">
+                <h3>Surat untuk Sayang 💌</h3>
+                <button class="close-btn" id="close-letter">✕</button>
+            </div>
+            <div class="letter-body" id="letter-body">
+                <!-- Letter content will be typed here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Collapsible Music Player -->
+    <div class="music-player">
+        <div class="music-widget" id="music-widget">
+            <div class="music-icon" id="music-icon">🎵</div>
+            <div class="music-controls-wrapper">
+                <div class="music-controls">
+                    <button class="music-btn" id="prev-btn">⏮</button>
+                    <button class="music-btn play-btn" id="play-btn">▶</button>
+                    <button class="music-btn" id="next-btn">⏭</button>
+                </div>
+                <div class="song-info">
+                    <div class="song-title" id="song-title">Track 1</div>
+                    <div class="song-progress">
+                        <div class="song-progress-bar" id="progress-bar"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="now-playing-indicator" id="now-playing">Now Playing</div>
+        </div>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="audio-player"></audio>
+
+    <script>
+        // Music Playlist
+        const playlist = [
+            'assets/1.mp3',
+            'assets/2.mp3',
+            'assets/3.mp3',
+            'assets/4.mp3',
+            'assets/5.mp3'
+        ];
+
+        const trackNames = [
+            'Lagu 1 🎵',
+            'Lagu 2 🎶',
+            'Lagu 3 🎤',
+            'Lagu 4 🎧',
+            'Lagu 5 🎼'
+        ];
+
+        // State
+        let currentTrack = 0;
+        let isPlaying = false;
+        let isExpanded = false;
+        let kangenCount = 0;
+        let isShaking = false;
+        let audioLoaded = false;
+
+        // DOM Elements
+        const loadingScreen = document.getElementById('loading-screen');
+        const loadingBar = document.getElementById('loading-bar');
+        const loadingOverlay = document.getElementById('loading-overlay');
+        const lockScreen = document.getElementById('lock-screen');
+        const unlockBtn = document.getElementById('unlock-btn');
+        const mainContent = document.getElementById('main-content');
+        const avatar = document.getElementById('avatar');
+        const avatarContainer = document.getElementById('avatar-container');
+        const kangenBtn = document.getElementById('kangen-btn');
+        const kangenResponse = document.getElementById('kangen-response');
+        const letterBtn = document.getElementById('letter-btn');
+        const letterModal = document.getElementById('letter-modal');
+        const closeLetter = document.getElementById('close-letter');
+        const letterBody = document.getElementById('letter-body');
+        const musicWidget = document.getElementById('music-widget');
+        const playBtn = document.getElementById('play-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const songTitle = document.getElementById('song-title');
+        const progressBar = document.getElementById('progress-bar');
+        const audioPlayer = document.getElementById('audio-player');
+        const floatingHearts = document.getElementById('floating-hearts');
+
+        // Kangen responses
+        const kangenResponses = [
+            "Aku juga kangen! 💕",
+            "Love you more! 🥰",
+            "Miss you too, Sayang! 😘",
+            " forever kangen sama kamu! 💖",
+            "Aku lebih kangen! 😭💕"
+        ];
+
+        // Letter content
+        const letterContent = `Sayangku yang paling spesial,
+
+Happy 671 Days Anniversary! 🎉💕
+
+Aku tahu ini mungkin aneh - membuat website gini buat kita. Tapi aku mau buat sesuatu yang berbeda, sesuatu yang bisa kamu simpen dan buka kapan aja kamu mau.
+
+Selama 671 hari ini, aku belajar banyak hal. Aku belajar bahwa cinta itu bukan hanya tentang kemewahan atau kata-kata romantis. Tapi tentang ada buat satu sama lain, saling support, dan yang paling penting - saling menerima dengan segala kekurangan kita.
+
+Terima kasih sudah mau ada dalam hidupku. Terima kasih sudah sabar sama aku yang kadang Bandel ini. Terima kasih sudah buat aku merasa Special setiap hari.
+
+Aku harap kita bisa terus jalan bareng-bareng. Aku mau bangunin kamu setiap pagi, aku mau makan bareng kamu, aku mau nemenin kamu navisin semua happy dan sedih kamu.
+
+I love you more than yesterday but less than tomorrow! 🥺💖
+
+Love,
+Boyfie mu yang selalu kangen 🐻`;
+
+        // Initialize
+        function init() {
+            // Create floating hearts
+            createFloatingHearts();
+            
+            // Load first track
+            loadTrack(0);
+            
+            // Run cute loading screen first
+            runCuteLoading();
+        }
+
+        function runCuteLoading() {
+            let progress = 0;
+            const loadInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(loadInterval);
+                    loadingBar.style.width = '100%';
+                    setTimeout(() => {
+                        // Hide cute loading, show headphones overlay
+                        loadingScreen.classList.add('hidden');
+                        setTimeout(() => {
+                            loadingOverlay.classList.add('visible');
+                            // Add click listener to dismiss
+                            loadingOverlay.addEventListener('click', dismissLoading);
+                        }, 500);
+                    }, 500);
+                }
+                loadingBar.style.width = progress + '%';
+            }, 200);
+        }
+
+        function dismissLoading() {
+            loadingOverlay.classList.add('hidden');
+            setTimeout(() => {
+                showLockScreen();
+                // Start playing music automatically
+                startMusic();
+            }, 500);
+        }
+
+        function showLockScreen() {
+            lockScreen.classList.add('visible');
+        }
+
+        function unlock() {
+            lockScreen.classList.remove('visible');
+            setTimeout(() => {
+                mainContent.classList.add('visible');
+            }, 500);
+        }
+
+        // Music Player Functions
+        function loadTrack(index) {
+            currentTrack = index;
+            audioPlayer.src = playlist[index];
+            songTitle.textContent = trackNames[index];
+            audioLoaded = false;
+            
+            audioPlayer.addEventListener('canplaythrough', () => {
+                audioLoaded = true;
+            }, { once: true });
+        }
+
+        function startMusic() {
+            if (!isPlaying) {
+                isPlaying = true;
+                playBtn.textContent = '⏸';
+                playBtn.style.background = 'var(--accent)';
+                
+                // Try to play
+                const playPromise = audioPlayer.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log('Audio play failed:', error);
+                    });
+                }
+                
+                updateProgress();
+            }
+        }
+
+        function togglePlay() {
+            if (isPlaying) {
+                audioPlayer.pause();
+                isPlaying = false;
+                playBtn.textContent = '▶';
+                playBtn.style.background = 'var(--highlight)';
+            } else {
+                isPlaying = true;
+                playBtn.textContent = '⏸';
+                playBtn.style.background = 'var(--accent)';
+                
+                const playPromise = audioPlayer.play();
+                if (playPromise !== undefined) {
+                    playPromise.catch(error => {
+                        console.log('Audio play failed:', error);
+                    });
+                }
+                
+                updateProgress();
+            }
+        }
+
+        function prevTrack() {
+            currentTrack = (currentTrack - 1 + playlist.length) % playlist.length;
+            loadTrack(currentTrack);
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        }
+
+        function nextTrack() {
+            currentTrack = (currentTrack + 1) % playlist.length;
+            loadTrack(currentTrack);
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        }
+
+        function updateProgress() {
+            if (!isPlaying) return;
+            
+            const current = audioPlayer.currentTime;
+            const duration = audioPlayer.duration;
+            
+            if (duration > 0) {
+                const progress = (current / duration) * 100;
+                progressBar.style.width = progress + '%';
+            }
+            
+            requestAnimationFrame(updateProgress);
+        }
+
+        // Track ended
+        audioPlayer.addEventListener('ended', () => {
+            nextTrack();
+            if (isPlaying) {
+                audioPlayer.play();
+            }
+        });
+
+        // Toggle music player expanded/collapsed
+        musicWidget.addEventListener('click', (e) => {
+            // Don't toggle if clicking control buttons
+            if (e.target.classList.contains('music-btn')) {
+                return;
+            }
+            
+            isExpanded = !isExpanded;
+            if (isExpanded) {
+                musicWidget.classList.add('expanded');
+            } else {
+                musicWidget.classList.remove('expanded');
+            }
+        });
+
+        // Music control buttons
+        playBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            togglePlay();
+        });
+
+        prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            prevTrack();
+        });
+
+        nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            nextTrack();
+        });
+
+        function createFloatingHearts() {
+            const emojis = ['💕', '💖', '💗', '💓', '💞', '💘'];
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    heart.style.left = Math.random() * 100 + '%';
+                    heart.style.animationDelay = Math.random() * 5 + 's';
+                    heart.style.animationDuration = (6 + Math.random() * 4) + 's';
+                    floatingHearts.appendChild(heart);
+                }, i * 500);
+            }
+        }
+
+        // Avatar click handler
+        avatarContainer.addEventListener('click', () => {
+            avatar.classList.add('blush');
+            createHeartParticles(avatarContainer);
+            setTimeout(() => {
+                avatar.classList.remove('blush');
+            }, 1000);
+        });
+
+        function createHeartParticles(element) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-particle';
+                    heart.textContent = '💕';
+                    heart.style.left = centerX + (Math.random() - 0.5) * 100 + 'px';
+                    heart.style.top = centerY + 'px';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 1000);
+                }, i * 100);
+            }
+        }
+
+        // Kangen button handler
+        kangenBtn.addEventListener('click', () => {
+            kangenCount++;
+            
+            // Reset animation
+            kangenResponse.classList.remove('show');
+            
+            setTimeout(() => {
+                if (kangenCount >= 5 && !isShaking) {
+                    // Spam effect - massive hearts and shake
+                    isShaking = true;
+                    document.body.classList.add('shake');
+                    createMassiveHearts();
+                    
+                    setTimeout(() => {
+                        document.body.classList.remove('shake');
+                        isShaking = false;
+                    }, 500);
+                    
+                    kangenResponse.textContent = "WUAHHH KUAT BANGET KLIK NYA! 😍💕";
+                } else {
+                    const responseIndex = Math.min(kangenCount - 1, kangenResponses.length - 1);
+                    kangenResponse.textContent = kangenResponses[responseIndex];
+                }
+                kangenResponse.classList.add('show');
+            }, 100);
+        });
+
+        function createMassiveHearts() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'confetti';
+                    heart.textContent = ['💕', '💖', '💗'][Math.floor(Math.random() * 3)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.fontSize = (1 + Math.random() * 2) + 'rem';
+                    heart.style.animationDuration = (2 + Math.random() * 2) + 's';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 4000);
+                }, i * 50);
+            }
+        }
+
+        // Letter modal handler
+        letterBtn.addEventListener('click', () => {
+            letterModal.classList.add('visible');
+            typeLetter();
+        });
+
+        closeLetter.addEventListener('click', () => {
+            letterModal.classList.remove('visible');
+            letterBody.innerHTML = '';
+        });
+
+        letterModal.addEventListener('click', (e) => {
+            if (e.target === letterModal) {
+                letterModal.classList.remove('visible');
+                letterBody.innerHTML = '';
+            }
+        });
+
+        function typeLetter() {
+            let index = 0;
+            const speed = 30;
+
+            function type() {
+                if (index < letterContent.length) {
+                    letterBody.innerHTML += letterContent.charAt(index);
+                    index++;
+                    setTimeout(type, speed);
+                    
+                    // Auto scroll to bottom
+                    letterBody.scrollTop = letterBody.scrollHeight;
+                }
+            }
+            
+            setTimeout(type, 500);
+        }
+
+        // Unlock button
+        unlockBtn.addEventListener('click', unlock);
+
+        // Initialize on load
+        window.addEventListener('load', init);
+    </script>
+</body>
+</html>
